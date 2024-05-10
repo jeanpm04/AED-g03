@@ -30,42 +30,40 @@ public class PriorityQueueLinkSort<E, P extends Comparable<P>> implements Priori
 		// Verifica si la cola no está vacía
 		if (!isEmpty()) {
 			// Crea un aux que empieza en first
-			// y ant que será un nodo antes de aux 
+			// y ant que será un nodo antes de aux (null)
 			Node<EntryNode> aux = this.first;
 			Node<EntryNode> ant = null;
+
 			// Verifica que aux sea diferente de null y
-			// compara las prioridades hasta que se cumpla la condición
-			// (que la pr del nuevo nodo sea mayor que la pr de algún nodo existente) 
+			// compara que la pr del nuevo nodo sea mayor que la
+			// pr del nodo aux (first) en una primera instancia
 			while (aux != null && pr.compareTo(aux.getData().priority) > 0) {
 				ant = aux;
 				aux = aux.getNext();
 			}
-			
-			// Cuando las prioridades son iguales se inserta el nodo según
-			// el orden de llegada
-			//if (aux != null && pr.compareTo(aux.getData().priority) == 0) {
-				// aux recorre hasta encontrar el último nodo con la misma prioridad
+
+			// Verifica que aux sea diferente de null y
+			// compara que las pr sean iguales
 			while (aux != null && pr.compareTo(aux.getData().priority) == 0) {
 				ant = aux;
 				aux = aux.getNext();
 			}
-			
-			// Caso donde la prioridad es la misma
-			// se inserta después del último nodo con
-			// la misma prioridad
-			if (ant != null) {
 
-				System.out.println("waza");
+			// Si ant es diferente de null la inserción no se hace
+			// al inicio de la cola
+			if (ant != null) {
 				// nuevoNodo.getNext() = ant.getNext();
-				
 				nuevoNodo.setNext(ant.getNext());
 				ant.setNext(nuevoNodo);
 			} else {
-				System.out.println("waza1");
-				// Si no hay nodos con la misma prioridad
-				// se inserta al inicio
+				// La inserción se hace al inicio de la cola
 				nuevoNodo.setNext(this.first);
 				this.first = nuevoNodo;
+			}
+
+			// Actualizar last al nuevo nodo si se inserta al final de la cola
+			if (nuevoNodo.getNext() == null) {
+				this.last = nuevoNodo;
 			}
 
 		} else {
