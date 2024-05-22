@@ -1,214 +1,125 @@
-package actividad;
+package seccion6;
 
-public class BSTree<E extends Comparable<E>> {
-	class Node {
+public class BSTree<E extends Comparable<E>>{
+	
+	class Node{
 		protected E data;
-		protected Node left, right;
-
+		protected Node left, rigth;
+		public Node right;
+		
 		public Node(E data) {
-			this.data = data;
-			this.left = null;
-			this.right = null;
+			this(data,null,null);
 		}
-
-		public Node(E data, Node left, Node right) {
+		
+		public Node(E data, Node left, Node rigth) {
 			this.data = data;
 			this.left = left;
-			this.right = right;
+			this.rigth =rigth;
 		}
 	}
-
+	
 	private Node root;
-
+	private boolean heigth;
+	
 	public BSTree() {
 		this.root = null;
 	}
-
-	public boolean isEmpty() {
+	
+	public boolean ismpety() {
 		return this.root == null;
 	}
-
-	// Método que inserta un elemento al BST.
-	// Si el elemento ya existe en el árbol levanta la excepción ItemDuplicated
+	
+	//metodo que inserta un elemento al BST
+	//si el elemento ya existe en el arbol levanta la excepcion itemduplicated
 	public void insert(E x) throws ItemDuplicated {
-		Node nuevoNodo = new Node(x);
-		if (isEmpty()) {
-			this.root = nuevoNodo;
-		} else {
-			Node p = null;
-			Node aux = this.root;
-
-			while (aux != null) {
-				p = aux;
-				if (nuevoNodo.data.compareTo(aux.data) < 0) {
-					aux = aux.left;
-				} else if (nuevoNodo.data.compareTo(aux.data) > 0) {
-					aux = aux.right;
-				} else {
-					throw new ItemDuplicated();
-				}
-			}
-			if (nuevoNodo.data.compareTo(p.data) > 0) {
-				p.right = nuevoNodo;
-			} else {
-				p.left = nuevoNodo;
-			}
-		}
+	    root = insertRec(root, x);
 	}
 
-	// Método que busca un elemento y retorna su información.
-	// Si no existe se levanta la excepción ItemNoFound
-	public E search(E x) throws ItemNoFound {
-		Node aux = this.root;
-		while (aux != null) {
-			if (aux.data.compareTo(x) > 0) {
-				aux = aux.left;
-			} else if (aux.data.compareTo(x) < 0) {
-				aux = aux.right;
-			} else {
-				return aux.data;
-			}
-		}
-		throw new ItemNoFound();
-	}
-
-	// Método que elimina un elemento del BST.
-	// Si no existe se levanta la excepción ItemNoFound
-	public void remove(E x) throws ItemNoFound {
-		if (!isEmpty()) {
-			boolean isLeftChild = true;
-			boolean isRoot = false;
-			Node p = null;
-			Node aux = this.root;
-
-			// Buscamos el nodo a eliminar
-			while (aux != null && aux.data != x) {
-				p = aux;
-				if (x.compareTo(aux.data) < 0) {
-					aux = aux.left;
-					isLeftChild = true;
-				} else {
-					aux = aux.right;
-					isLeftChild = false;
-				}
-			}
-			// Si el nodo a eliminar no se encuentra, lanzamos una excepción
-			if (aux == null) {
-				throw new ItemNoFound();
-			}
-			/*if (aux == root) {
-				 Node nodito = subEliminacion(aux);
-				 aux.data = nodito.data;
-				 this.root = aux;
-			}
-			/*if (aux == this.root) { // Si el nodo a eliminar es la raíz
-				Node sucesor = subEliminacion(aux);
-				if (sucesor != null) {
-					sucesor.left = this.root.left;
-					sucesor.right = this.root.right;
-					this.root = sucesor;
-				} else {
-					// Si el nodo raíz no tiene hijo derecho
-					this.root = this.root.left;
-				}
-			} else { // Si el nodo a eliminar no es la raíz*/
-				// Caso 1: Si se trata de una hoja se elimina directamente
-				if (aux.left == null && aux.right == null) {
-					if (isLeftChild) {
-						p.left = null;
-					} else {
-						p.right = null;
-					}
-				}
-				// Caso 2: Si tiene un único hijo
-				else if (aux.right == null) {
-					if (isLeftChild) {
-						p.left = aux.left;
-					} else {
-						p.right = aux.left;
-					}
-				} else if (aux.left == null) {
-					if (isLeftChild) {
-						p.left = aux.right;
-					} else {
-						p.right = aux.right;
-					}
-				} else {
-					// caso 3
-					Node nodito = subEliminacion(aux);
-					/*
-					 * c.data = nodito.data;
-					 */
-
-					nodito.left = aux.left;
-					nodito.right = aux.right;
-					if (isLeftChild) {
-						p.left = nodito;
-					} else {
-						p.right = nodito;
-					}
-
-				}
-			}
-		/*}*/ else {
-			// Si el árbol está vacío, lanzamos una excepción
-			throw new ItemNoFound();
-		}
-	}
-
-	private Node subEliminacion(Node nodo) {
-		Node p = nodo;
-	    Node aux = nodo; // Comenzamos desde el subárbol derecho
-	    aux=aux.right;
-	    // Avanzamos hacia el nodo más a la izquierda en el subárbol derecho
-	    while (aux.left != null) {
-	        p = aux;
-	        aux = aux.left;
+	Node insertRec(Node root, E x) throws ItemDuplicated {
+	    if (root == null) {
+	        root = new Node(x);
+	        return root;
 	    }
 
-	    /*// Desconectamos el sucesor de su posición original
-	    if (p != nodo) {
-	        p.left = aux.right;
-	    } else {
-	        nodo.right = aux.right;
-	    }*/
-	    p.left = aux.right;
-	    return aux;
+	    if (x.compareTo(root.data) < 0)
+	        root.left = insertRec(root.left, x);
+	    else if (x.compareTo(root.data) > 0)
+	        root.right = insertRec((BSTree<E>.Node) root.right, x);
+	    else 
+	        throw new ItemDuplicated();
 
+	    return root;
+	}
+	
+	//metodo que busca un elemento y retorna su informacion
+	//si no existe se levanta la excepcion Itemnofound
+	public E search(E x) throws ItemNoFound {
+	    Node result = searchRec(root, x);
+	    if (result == null) throw new ItemNoFound();
+	    return result.data;
 	}
 
-	
-	public E minRemove() throws ItemNoFound{
-		 Node nodito = minRemoveReturn();
-		 return nodito.data;
+	Node searchRec(Node root, E x) {
+	    if (root==null || root.data==x)
+	        return root;
+
+	    if (root.data.compareTo(x) < 0)
+	        return searchRec((BSTree<E>.Node) root.right, x);
+
+	    return searchRec(root.left, x);
 	}
-	private Node minRemoveReturn() throws ItemNoFound {
-		 if (isEmpty()){
-			 throw new ItemNoFound();
-		 }
-		 Node nodito = root;
-		 while (nodito.left != null){
-			 nodito = nodito.left;
-		 }
-		 remove(nodito.data);
-		 return nodito;
-		 }
 	
-	// Retorna la cadena que tiene toda la información del BST.
-	// Utiliza alguno de los recorridos
-	@Override
 	public String toString() {
-		return toString(this.root);
+	    return toStringRec(root);
+	}
+	
+	public void remove(E x) throws ItemNoFound {
+	    root = removeRec(root, x);
 	}
 
-	// Método recursivo para recorrer el árbol (preorden) y construir la cadena
-	private String toString(Node node) {
-		if (node == null)
-			return "";
-		String result = node.data.toString() + " ";
-		result += toString(node.left);
-		result += toString(node.right);
-		return result;
-	}
+	Node removeRec(Node root, E x) throws ItemNoFound {
+	    if (root == null)  throw new ItemNoFound();
 
+	    if (x.compareTo(root.data) < 0)
+	        root.left = removeRec(root.left, x);
+	    else if (x.compareTo(root.data) > 0)
+	        root.right = removeRec((BSTree<E>.Node) root.right, x);
+	    else {
+	        if (root.left == null)
+	            return (BSTree<E>.Node) root.right;
+	        else if (root.right == null)
+	            return root.left;
+
+	        root.data = minRemove((BSTree<E>.Node) root.right);
+
+	        root.right = removeRec((BSTree<E>.Node) root.right, root.data);
+	    }
+
+	    return root;
+	}
+	
+	private E minRemove(Node root) {
+	    E minv = root.data;
+	    while (root.left != null) {
+	        minv = root.left.data;
+	        root = root.left;
+	    }
+	    return minv;
+	}
+	
+	public E min() throws ItemNoFound {
+	    if (root == null) throw new ItemNoFound();
+	    return minRemove(root);
+	}
+	
+
+	String toStringRec(Node root) {
+	    String result = "";
+	    if (root != null) {
+	        result += toStringRec(root.left);
+	        result += root.data.toString() + " ";
+	        result += toStringRec((BSTree<E>.Node) root.right);
+	    }
+	    return result;
+	}
 }
