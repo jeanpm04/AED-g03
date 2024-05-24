@@ -2,17 +2,9 @@ package actividad;
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ItemDuplicated {
 		// TODO Auto-generated method stub
 		try {
-			BSTree<Integer> tree = new BSTree<>();
-			tree.insert(7);
-			tree.insert(2);
-			tree.insert(9);
-			tree.insert(1);
-			tree.insert(5);
-			tree.insert(3);
-			
 			BSTree<Integer> tree1 = new BSTree<>();
 			tree1.insert(7);
 			tree1.insert(2);
@@ -21,10 +13,18 @@ public class Test {
 			tree1.insert(5);
 			tree1.insert(3);
 			
-			System.out.println("¿Los árboles tienen la misma área?: " + sameArea(tree, tree1));
+			BSTree<Integer> tree2 = new BSTree<>();
+			tree2.insert(7);
+			tree2.insert(2);
+			tree2.insert(9);
+			tree2.insert(1);
+			tree2.insert(5);
+			tree2.insert(3);
+			
+			System.out.println("Los arboles tienen la misma area?: " + sameArea(tree1, tree2));
 
 		} catch(ItemDuplicated e){
-			System.out.println("No se puede insertar un elemento duplicado.");
+			throw new ItemDuplicated();
 		}
 	}
 
