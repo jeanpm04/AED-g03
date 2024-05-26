@@ -24,7 +24,19 @@ public class TestAVL {
 		System.out.println(avlTree);
 		avlTree.insert(1);
 		System.out.println(avlTree);
-		
-	
+		try {
+			avlTree.remove(2);
+        } catch (ItemNoFound e) {
+            System.out.println("Elemento no encontrado en el árbol AVL: " + e.getMessage());
+        }
+		System.out.println(avlTree);
+		try {
+			avlTree.remove(1);
+        } catch (ItemNoFound e) {
+            System.out.println("Elemento no encontrado en el árbol AVL: " + e.getMessage());
+        }
+		System.out.println(avlTree);
+		System.out.println("Recorrido por amplitud en el árbol AVL:");
+        avlTree.recorridoPorAmplitud();
 	}
 }

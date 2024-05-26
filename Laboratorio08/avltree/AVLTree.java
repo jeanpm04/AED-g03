@@ -1,5 +1,10 @@
 package avltree;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+import avltree.BSTree.Node;
+
 public class AVLTree<E extends Comparable<E>> extends BSTree<E> {
 	class NodeAVL extends Node {
 		protected int bf;
@@ -152,5 +157,121 @@ public class AVLTree<E extends Comparable<E>> extends BSTree<E> {
 		node = p;
 		return node;
 	}
+	
+	////
+	protected NodeAVL remove(E x, NodeAVL node) throws ItemNoFound {
+	    NodeAVL fat = node;
+
+	    if (node == null) {
+	        throw new ItemNoFound(); // Elemento no encontrado
+	    } else {
+	        int resC = node.data.compareTo(x);
+	        if (resC == 0) {
+	            // Elemento encontrado, procedemos a eliminarlo
+	            if (node.left == null && node.right == null) {
+	                // Caso 1: Nodo es una hoja, se elimina directamente
+	                fat = null;
+	            } else if (node.right == null) {
+	                // Caso 2: Nodo tiene solo un hijo a la izquierda
+	                fat = (NodeAVL)node.left;
+	            } else if (node.left == null) {
+	                // Caso 2: Nodo tiene solo un hijo a la derecha
+	                fat = (NodeAVL)node.right;
+	            } else {
+	                // Caso 3: Nodo tiene ambos hijos
+	                NodeAVL successor = subEliminacion(node);
+	                successor.left = node.left;
+	                successor.right = node.right;
+	                fat = successor;
+	            }
+	        } else if (resC < 0) {
+	            node.left = remove(x, (NodeAVL)node.left); // Buscar en el subárbol izquierdo
+	            if (this.height) {
+	                switch (node.bf) {
+	                    case 1:
+	                        node.bf = 0;
+	                        this.height = false;
+	                        break;
+	                    case 0:
+	                        node.bf = -1;
+	                        this.height = true;
+	                        break;
+	                    case -1: // bf = -2
+	                        fat = balanceToRight(node);
+	                        this.height = false;
+	                        break;
+	                }
+	            }
+	        } else {
+	            node.right = remove(x, (NodeAVL)node.right); // Buscar en el subárbol derecho
+	            if (this.height) {
+	                switch (node.bf) {
+	                    case -1:
+	                        node.bf = 0;
+	                        this.height = false;
+	                        break;
+	                    case 0:
+	                        node.bf = 1;
+	                        this.height = true;
+	                        break;
+	                    case 1: // bf = 2
+	                        fat = balanceToLeft(node);
+	                        this.height = false;
+	                        break;
+	                }
+	            }
+	        }
+	    }
+	    return fat;
+	}
+
+    private NodeAVL subEliminacion(NodeAVL nodo) {
+        NodeAVL p = nodo;
+        NodeAVL aux = (NodeAVL) nodo.right; // Comenzamos desde el subárbol derecho
+
+        // Avanzamos hacia el nodo más a la izquierda en el subárbol derecho
+        while (aux.left != null) {
+            p = aux;
+            aux = (NodeAVL) aux.left;
+        }
+
+        // Desconectamos el sucesor de su posición original
+        if (p != nodo) {
+            p.left = aux.right;
+        } else {
+            nodo.right = aux.right;
+        }
+
+        return aux;
+    }
+    
+    public void recorridoPorAmplitud() {
+        if (root == null) {
+            System.out.println("El árbol está vacío.");
+            return;
+        }
+
+        Queue<NodeAVL> queue = new LinkedList<>();
+        queue.add((NodeAVL) root);
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size(); // Tamaño del nivel actual
+
+            for (int i = 0; i < levelSize; i++) {
+                NodeAVL current = queue.poll();
+                System.out.print(current.data + " ");
+
+                // Agregar los hijos del nodo actual a la cola
+                if (current.left != null) {
+                    queue.add((NodeAVL) current.left);
+                }
+                if (current.right != null) {
+                    queue.add((NodeAVL) current.right);
+                }
+            }
+
+            System.out.println(); // Nueva línea para separar niveles
+        }
+    }
 
 }
