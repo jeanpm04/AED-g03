@@ -22,7 +22,7 @@ public class BTree<E extends Comparable<E>> {
         if(current == null) {
             return false;
         } else {
-            fl = current.searchNode(cl, pos); // Aquí está el cambio
+            fl = current.searchNode(cl, pos);
             if(fl) {
                 System.out.println("Item "+cl+" encontrado en la posición "+pos[0]);
                 return true;
