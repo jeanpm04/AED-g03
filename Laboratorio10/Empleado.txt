@@ -1,0 +1,5 @@
+4
+1020, Juan Pérez, Calle 123, Ciudad A
+1002, María García, Avenida Principal 456, Ciudad B
+1003, José Rodríguez, Calle Central 789, Ciudad C
+1004, Ana Martínez, Paseo Colón 321, Ciudad A
