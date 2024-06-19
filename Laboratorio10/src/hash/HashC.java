@@ -49,7 +49,7 @@ public class HashC<E extends Comparable<E>> {
         }
         return sum % m;
     }
-	
+    // 0 = vacío, 1 = ocupado, 2 = eliminado
 	public void insert(int key, E reg) {
 		int dressHash = functionHash(key);
 		int address = dressHash;
@@ -60,10 +60,11 @@ public class HashC<E extends Comparable<E>> {
 				//return;
 			}
 			address = linearProbing(address, key);
-			if(address == -1) {
+			if(address == dressHash) {
 				System.out.println("Tabla hash llena");
 				return;
 			}
+		
 		}
 		table.set(address, new Element(1, new Register<E>(key, reg)));
 	}

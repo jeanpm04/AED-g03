@@ -16,7 +16,10 @@ public class TestHash {
 		table.insert(41, "Miguel");
 		table.insert(16, "Lucia");
 		table.insert(34, "Jorge"); //clave duplicada
+		//table.insert(34, "Jean"); //tabla llena
 		System.out.println(table);
+		
+		System.out.println(table.search(30));
 		
 		HashA<String> hashA = new HashA<String>(11);
 		hashA.insert(34, "Ana");
