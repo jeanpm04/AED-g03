@@ -20,7 +20,9 @@ public class Register<E> implements Comparable<Register<E>> {
 	public int getKey() {
 		return this.key;
 	}
-	
+	public E getValue() {
+        return value;
+    }
 	public String toString() {
 		return this.key+":"+this.value.toString();
 	}

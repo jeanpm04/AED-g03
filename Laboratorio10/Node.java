@@ -1,33 +1,30 @@
 package hash;
 
-
 public class Node<T> {
 	public T data;
-	// private T data;
-	// private Node<T> next;
 	public Node<T> next;
-	
-	Node(T data){
+
+	Node(T data) {
 		this(data, null);
 	}
-	
-	Node(T d, Node<T> n){
+
+	Node(T d, Node<T> n) {
 		this.data = d;
 		this.next = n;
 	}
-	
+
 	public T getData() {
 		return this.data;
 	}
-	
-	public Node<T> getNext(){
+
+	public Node<T> getNext() {
 		return this.next;
 	}
-	
+
 	public void setData(T data) {
 		this.data = data;
 	}
-	
+
 	public void setNext(Node<T> n) {
 		this.next = n;
 	}
