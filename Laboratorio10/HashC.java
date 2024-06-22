@@ -24,7 +24,9 @@ public class HashC<E extends Comparable<E>> {
 	 * isPrime-> Verificar si un número es primo
 	 */
 	public HashC(int n) {
-		this.m = findClosestPrime(n);
+		//this.m = findClosestPrime(n);
+		this.m = findClosestPrime((int) Math.ceil(n * 1.4));
+		//System.out.println(m);
 		this.table = new ArrayList<Element>(m);
 		for(int i=0; i<m; i++) {
 			this.table.add(new Element(0,null));
@@ -46,6 +48,22 @@ public class HashC<E extends Comparable<E>> {
 	    return true;
     }
 	
+	private int quadraticProbing(int dressHash, int key) {
+	    int posInit = dressHash;
+	    int j=1; //#colision
+	    do {
+	        Element element = table.get(dressHash);
+	        if (element == null || element.mark == 0 ||
+	            (element.mark == 1 && element.reg == null)) {
+	            return dressHash;
+	        }
+	        //index = index+(#colision) al cuadrado % TT
+	        dressHash = (dressHash + j*j) % m;
+	        j++;
+	    }while(dressHash != posInit);
+	    return -1;
+	}
+    
 	private int functionHash(int key) {
 		return key % m;
 	}
@@ -98,7 +116,8 @@ public class HashC<E extends Comparable<E>> {
 	
 	public void insert(int key, E reg) {
 		int dressHash = functionHash(key);
-		int address = linearProbing(dressHash, key);
+		//int address = linearProbing(dressHash, key);
+		int address = quadraticProbing(dressHash, key);
 		if(address != -1) {
 			table.set(address, new Element(1, new Register<>(key, reg)));
 		}else {
