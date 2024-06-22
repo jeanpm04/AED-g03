@@ -24,8 +24,8 @@ public class HashC<E extends Comparable<E>> {
 	 * isPrime-> Verificar si un número es primo
 	 */
 	public HashC(int n) {
-		//this.m = findClosestPrime(n);
-		this.m = findClosestPrime((int) Math.ceil(n * 1.4));
+		this.m = findClosestPrime(n);
+		//this.m = findClosestPrime((int) Math.ceil(n * 1.4));
 		//System.out.println(m);
 		this.table = new ArrayList<Element>(m);
 		for(int i=0; i<m; i++) {
@@ -58,7 +58,7 @@ public class HashC<E extends Comparable<E>> {
 	            return dressHash;
 	        }
 	        //index = index+(#colision) al cuadrado % TT
-	        dressHash = (dressHash + j*j) % m;
+	        dressHash = (posInit + j*j) % m;
 	        j++;
 	    }while(dressHash != posInit);
 	    return -1;
